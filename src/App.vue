@@ -1,5 +1,5 @@
-<script setup lang="ts">
-</script>
+<!-- <script setup lang="ts"> -->
+<!-- </script> -->
 
 <template>
   <div class="wrapper">
@@ -10,9 +10,11 @@
       </div>
       <div class="cards">
         <div class="card" v-for="(card, i) in cities">
-          <h1>{{ card.temp }} C</h1>
-          <h1>{{ card.city }}</h1>
-          <h1>{{ card.weather }}</h1>
+          <img :src="'./src/components/icons/' + card.weather + '.png'" alt="">
+          <span>
+            <h1>{{ card.temp }} C</h1>
+            <h1>{{ card.city }}</h1>
+          </span>
         </div>
       </div>
     </div>
@@ -134,5 +136,13 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+}
+
+.card>img {
+  height: 100px;
+}
+
+.card>span {
+  text-align: center;
 }
 </style>
