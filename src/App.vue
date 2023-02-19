@@ -6,9 +6,14 @@
     <div class="main-window">
       <div class="input-block">
         <input type="text" v-model="city">
-        <button><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg></button>
+        <button @click="getWeather()"><img src="./components/icons/magnifying-glass.png" alt=""></button>
       </div>
       <div class="cards">
+        <div class="card" v-for="(card, i) in cities">
+          <h1>{{ card.temp }} C</h1>
+          <h1>{{ card.city }}</h1>
+          <h1>{{ card.weather }}</h1>
+        </div>
       </div>
     </div>
   </div>
@@ -20,6 +25,7 @@ export default {
   data() {
     return {
       city: '',
+      cities: []
     }
   },
   methods: {
@@ -29,7 +35,14 @@ export default {
       let cityKey = ''
       fetch(`http://dataservice.accuweather.com/locations/v1/cities/search?apikey=PTTZWzHKWNQrpEaRn3tgfJKT4TV2xI1k&q=${city}&language=ru`).then(resp => { return resp.json() }).then(data => {
         cityKey = data[0].Key
-        fetch(`http://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=PTTZWzHKWNQrpEaRn3tgfJKT4TV2xI1k&language=ru`).then(resp => { return resp.json() }).then(data => { console.log(data[0].Temperature.Metric.Value) })
+        fetch(`http://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=PTTZWzHKWNQrpEaRn3tgfJKT4TV2xI1k&language=ru`).then(resp => { return resp.json() }).then(data => {
+          console.log(data[0])
+          this.cities.push({
+            temp: data[0].Temperature.Metric.Value,
+            city: city,
+            weather: data[0].WeatherText
+          })
+        })
       })
     }
   }
@@ -62,9 +75,15 @@ export default {
   justify-content: space-around;
 }
 
-.input-block{
+.input-block {
+  padding: 0;
+  margin: 0;
   width: 700px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
+
 .input-block>input {
   width: 100%;
   height: 85px;
@@ -76,6 +95,44 @@ export default {
   font-family: Montserrat, sans-serif;
 }
 
+.input-block>button {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  display: block;
+  transition: 0.3s;
+  margin-right: 25px;
+}
+
+.input-block>button:hover {
+  transform: scale(1.2);
+  transition: 0.3ss;
+}
+
+.input-block>button>img {
+  width: inherit;
+  size: inherit;
+}
+
 .cards {
   height: 300px;
-}</style>
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  height: 100%;
+  width: 220px;
+  border: solid 5px #1b1b1b;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+</style>
