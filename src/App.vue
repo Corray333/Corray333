@@ -27,7 +27,113 @@
   </div>
 </template>
 
-<script>
+<script >
+// <script  setup lang="ts">
+// import { ref, onMounted } from 'vue'
+
+// const city = ref('')
+// const cities = ref([])
+// const alert = ref('')
+
+// function delCard(i) {
+//   cities.value.splice(i, 1)
+//   let citiesNames = []
+//   for (let i = 0; i < cities.value.length; i++) citiesNames.push(cities.value[i].city)
+//   localStorage.setItem('cities', JSON.stringify(citiesNames))
+// }
+// function getWeather(city) {
+//   if (cities.value.length < 3) {
+//     let url = `https://api.tomorrow.io/v4/weather/realtime?location=${city}&apikey=X570qK9SKTRbhja3nOfFQbOWZNCLDhdS`
+//     fetch(url).then(resp => { return resp.json() }).then(data => {
+//       if (cities.value.filter(city => JSON.stringify(city.location) == JSON.stringify(data.location)).length == 0) {
+//         cities.value.push({
+//           temp: data.data.values.temperature,
+//           city: city,
+//           weather: {
+//             "0": "Unknown",
+//             "1000": "Clear, Sunny",
+//             "1100": "Mostly Clear",
+//             "1101": "Partly Cloudy",
+//             "1102": "Mostly Cloudy",
+//             "1001": "Cloudy",
+//             "2000": "Fog",
+//             "2100": "Light Fog",
+//             "4000": "Drizzle",
+//             "4001": "Rain",
+//             "4200": "Light Rain",
+//             "4201": "Heavy Rain",
+//             "5000": "Snow",
+//             "5001": "Flurries",
+//             "5100": "Light Snow",
+//             "5101": "Heavy Snow",
+//             "6000": "Freezing Drizzle",
+//             "6001": "Freezing Rain",
+//             "6200": "Light Freezing Rain",
+//             "6201": "Heavy Freezing Rain",
+//             "7000": "Ice Pellets",
+//             "7101": "Heavy Ice Pellets",
+//             "7102": "Light Ice Pellets",
+//             "8000": "Thunderstorm"
+//           }[data.data.values.weatherCode],
+//           weatherPicture: {
+//             "0": "Unknown",
+//             "1000": new Date().getHours() < 20 ? "clearDay" : "clearNight",
+//             "1100": new Date().getHours() < 20 ? "mostlyClearDay" : "mostlyClearNight",
+//             "1101": new Date().getHours() < 20 ? "partlyCloudyDay" : "partlyCloudyNight",
+//             "1102": new Date().getHours() < 20 ? "mostlyCloudyDay" : "mostlyCloudyNight",
+//             "1001": "cloudy",
+//             "2000": "Fog",
+//             "2100": "Light Fog",
+//             "4000": "Drizzle",
+//             "4001": "Rain",
+//             "4200": "Light Rain",
+//             "4201": "Heavy Rain",
+//             "5000": "Snow",
+//             "5001": "Flurries",
+//             "5100": "Light Snow",
+//             "5101": "Heavy Snow",
+//             "6000": "Freezing Drizzle",
+//             "6001": "Freezing Rain",
+//             "6200": "Light Freezing Rain",
+//             "6201": "Heavy Freezing Rain",
+//             "7000": "Ice Pellets",
+//             "7101": "Heavy Ice Pellets",
+//             "7102": "Light Ice Pellets",
+//             "8000": "Thunderstorm"
+//           }[data.data.values.weatherCode],
+//           location: data.location,
+//           time: new Date().getHours() > 20 || new Date().getHours() < 6 ? 'night' : 'day'
+//         })
+//         let citiesNames = []
+//         for (let i = 0; i < cities.value.length; i++) citiesNames.push(cities.value[i].city)
+//         localStorage.setItem('cities', JSON.stringify(citiesNames))
+//       }
+//       else {
+//         alert.value = 'Город уже добавлен!'
+//         setTimeout(() => {
+//           alert.value = ''
+//         }, "3000")
+//       }
+//     })
+//   }
+//   else {
+//     alert.value = 'Достигнут лимит закрепленных городов!'
+//     setTimeout(() => {
+//       alert.value = ''
+//     }, "3000")
+//   }
+// }
+
+// onMounted(() => {
+//   let citiesNames = JSON.parse(localStorage.getItem('cities'))
+//   if (citiesNames != null) {
+//     for (let i = 0; i < citiesNames.length; i++) getWeather(citiesNames[i])
+//   }
+//   else {
+//     cities.value = []
+//   }
+// })
+
 export default {
   name: 'App',
   data() {
