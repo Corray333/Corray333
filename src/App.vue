@@ -13,13 +13,30 @@
       </div>
       <div class="cards">
         <TransitionGroup name="bounce">
-          <div class="card" :class="card.time" v-for="(card, i) in cities" :key="i">
-            <button @click="delCard(i)">-</button>
-            <img :src="'/src/components/icons/' + card.weatherPicture + '.png'" alt="">
-            <span>
-              <h1>{{ Math.ceil(card.temp) }} C</h1>
-              <h1>{{ card.city }}</h1>
-            </span>
+          <div class="card-wrapper" v-for="(card, i) in cities">
+            <div class="card">
+              <div class="card-face" :class="card.time" :key="i">
+                <img :src="'/src/components/icons/' + card.weatherPicture + '.png'" alt="">
+                <span>
+                  <h1>{{ Math.ceil(card.temp) }} C°</h1>
+                  <h1>{{ card.city }}</h1>
+                </span>
+              </div>
+              <div class="card-back" :class="card.time" :key="i">
+                <button @click="delCard(i)">-</button>
+                <span>
+                  <p>{{ Math.ceil(card.temp) }} C°</p>
+                  <p>{{ card.city }}</p>
+                </span>
+                <p>Ощущается как: {{ card.temperatureApparent }}</p>
+                <p>Влажность: {{ card.humidity }}%</p>
+                <p>Видимость: {{ card.visibility }}</p>
+                <p>Скорость ветра: {{ card.windSpeed }}м/с</p>
+                <p>Направление: <img src="./components/icons/wind.png" alt="" :key="i" :style="{ transform: 'rotate('+ (card.windDirection-90)+'deg)'}"></p>
+                <!-- <div class="wind-direction">
+                </div> -->
+              </div>
+            </div>
           </div>
         </TransitionGroup>
       </div>
@@ -163,7 +180,7 @@ export default {
     },
     getWeather(city) {
       if (this.cities.length < 3) {
-        let url = `https://api.tomorrow.io/v4/weather/realtime?location=${city}&apikey=X570qK9SKTRbhja3nOfFQbOWZNCLDhdS`
+        let url = `https://api.tomorrow.io/v4/weather/realtime?location=${city}&apikey=havHLBTWq59bU3up0Ze9zC5g1iTPasdH`
         fetch(url).then(resp => { return resp.json() }).then(data => {
           if (this.cities.filter(city => JSON.stringify(city.location) == JSON.stringify(data.location)).length == 0) {
             this.cities.push({
@@ -222,7 +239,12 @@ export default {
                 "8000": "Thunderstorm"
               }[data.data.values.weatherCode],
               location: data.location,
-              time: new Date().getHours() > 20 || new Date().getHours() < 6 ? 'night' : 'day'
+              time: new Date().getHours() > 20 || new Date().getHours() < 6 ? 'night' : 'day',
+              windDirection: data.data.values.windDirection,
+              windSpeed: Math.ceil(data.data.values.windSpeed),
+              humidity: Math.ceil(data.data.values.humidity),
+              temperatureApparent: Math.ceil(data.data.values.temperatureApparent),
+              visibility: data.data.values.visibility
             })
             let citiesNames = []
             for (let i = 0; i < this.cities.length; i++) citiesNames.push(this.cities[i].city)
@@ -355,15 +377,13 @@ export default {
   width: 220px;
   border: solid 5px #1b1b1b;
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   transition: 0.4s;
-  justify-content: space-around;
   position: relative;
+  transform-style: preserve-3d;
+
 }
 
-.card>button {
+.card-back>button {
   position: absolute;
   top: 0;
   right: 0;
@@ -379,20 +399,60 @@ export default {
   box-sizing: content-box;
   padding: 0s;
 }
+.card-face{
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-.card>button:hover {
+.card-back>button:hover {
   transform: scale(1.3);
   transition: .2s;
 }
 
-.card>img {
+.card-face>img {
   height: 100px;
 }
 
-.card {
+.card{
+  position: relative;
+}
+.card-face, .card-back{
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  border-radius: 9px;
+  height: 100%;
+}
+.card-wrapper{
   text-align: center;
   color: white;
   margin-right: 4px;
+}
+.card-back{
+  transform: rotateY(180deg);
+  color: white;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.card-back>*{
+  padding: 0 15px;
+  margin: 3px 0;
+}
+.card-back>span{
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+}
+.card-back>p>img{
+  height: 15px;
+}
+
+.card-wrapper:hover .card, .card:hover{
+  transform: rotateY(180deg);
 }
 
 .bounce-enter-active {
